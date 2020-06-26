@@ -1,0 +1,61 @@
+// Make connection
+var socket = io.connect('http://localhost:4000');
+var socket2 = io.connect('http://localhost:4000/admin'); // admin namespace/endpoint  
+
+ 
+// Query DOM
+var message = document.getElementById('message'),
+      handle = document.getElementById('handle'),
+      btn = document.getElementById('send'),
+      output = document.getElementById('output'),
+      feedback = document.getElementById('feedback');
+
+// Emit events
+btn.addEventListener('click', function(){
+    socket.emit('chat', {
+        message: message.value,
+        handle: handle.value
+    });
+    message.value = "";
+});
+
+message.addEventListener('keypress', function(){
+    socket.emit('typing', handle.value);
+}) 
+
+// Listen for events
+socket.on('connect',()=>{
+    console.log("id",socket.id); 
+    // console.log(socket.connected);
+    // console.log(socket.open);
+})
+
+socket2.on('connect',()=>{
+    console.log("id2",socket2.id);
+})
+
+socket2.on('welcome',(msg)=>{
+    console.log(msg);
+})
+
+socket.on('chat', function(data){
+    feedback.innerHTML = '';
+    output.innerHTML += '<p><strong>' + data.handle + ': </strong>' + data.message + '</p>';
+});
+
+socket.on('typing', function(data){
+    feedback.innerHTML = '<p><em>' + data + ' is typing a message...</em></p>';
+});
+
+socket.on('message',function(data){
+    console.log(data);
+});
+
+// socket.on('ping',()=>{
+//     console.log("ping was recieved from the server");
+// });
+
+// socket.on('pong',(latency)=>{
+//     console.log(latency);
+//     console.log("pong was sent to server");
+// })
