@@ -48,7 +48,13 @@ body{
 
 .chat-panel{
   background-color: #fff;
-  min-height: 100vh;
+  min-height: 50vh;
+  position: relative;
+  padding-top: 10px;
+}
+.sketch-board{
+  background-color: #c7e5f7;
+  min-height: 50vh;
   position: relative;
   padding-top: 10px;
 }

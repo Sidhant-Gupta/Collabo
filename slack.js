@@ -1,18 +1,14 @@
 var express = require('express');
-var bodyParser = require("body-parser");
 var socket = require('socket.io');
 let namespaces = require('./public/data/Namespace');
+const { port } = require('./constants/envConfig');
 
 var app = express();
-
-const port = process.env.PORT || 4000;
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }))
-
-var server = app.listen(port, function () {
+var server = app.listen(4000, function () {
     console.log(`listening to request on port ${port}`);
 });
 var io = socket(server);
+
 app.use(express.static('public'));
 
 

@@ -5,7 +5,10 @@
   "main": "slack.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node slack.js"
+    "start": "nodemon slack.js"
+  },
+  "engines":{
+    "node":"12.14.0"
   },
   "author": "",
   "license": "ISC",
