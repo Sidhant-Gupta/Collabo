@@ -13,12 +13,11 @@ app.set('view engine', 'ejs');
 
 app.use(express.static('public'));
 
+
 app.get('/board', async function (req, res, next) {
     console.log("hhh");
     res.render('board');
 })
-
-
 
 io.on('connection', function (socket) {
     let nsData = namespaces.map((ns) => {
@@ -30,9 +29,15 @@ io.on('connection', function (socket) {
     console.log(nsData);
     socket.emit('nsList', nsData);
 
+
+    // For board and chat
     socket.on('mouse', (data) => {
         console.log(data);
-        socket.broadcast.emit('mouse',data);
+        socket.broadcast.emit('mouse', data);
+    })
+
+    socket.on('chat', (chat) => {
+        io.emit('chat', chat);
     })
 })
 
