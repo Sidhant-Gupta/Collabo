@@ -9,7 +9,14 @@ var server = app.listen(4000, function () {
 });
 var io = socket(server);
 
+app.set('view engine', 'ejs');
+
 app.use(express.static('public'));
+
+app.get('/board', async function (req, res, next) {
+    console.log("hhh");
+    res.render('board');
+})
 
 
 
@@ -22,6 +29,11 @@ io.on('connection', function (socket) {
     })
     console.log(nsData);
     socket.emit('nsList', nsData);
+
+    socket.on('mouse', (data) => {
+        console.log(data);
+        socket.broadcast.emit('mouse',data);
+    })
 })
 
 namespaces.forEach(namespace => {
@@ -70,8 +82,17 @@ namespaces.forEach(namespace => {
 
             io.of(namespace.endpoint).to(roomTitle).emit("messageToClients", fullMessage);
         })
+        nsSocket.on('mouse', (data) => {
+            // Data comes in as whatever was sent, including objects
+            console.log("Received: 'mouse' " + data.x + " " + data.y);
 
+            // Send it to all other clients
+            nsSocket.broadcast.emit('mouse', data);
 
+            // This is a way to send to everyone including sender
+            // io.sockets.emit('message', "this goes to everyone");
+
+        });
     })
 });
 
