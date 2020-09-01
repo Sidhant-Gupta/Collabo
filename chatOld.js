@@ -1,6 +1,5 @@
 // Make connection
 var socket = io.connect('http://localhost:4000');
-var socket2 = io.connect('http://localhost:4000/admin'); // admin namespace/endpoint  
 
  
 // Query DOM
@@ -30,14 +29,6 @@ socket.on('connect',()=>{
     // console.log(socket.open);
 })
 
-socket2.on('connect',()=>{
-    console.log("id2",socket2.id);
-})
-
-socket2.on('welcome',(msg)=>{
-    console.log(msg);
-})
-
 socket.on('chat', function(data){
     feedback.innerHTML = '';
     output.innerHTML += '<p><strong>' + data.handle + ': </strong>' + data.message + '</p>';
@@ -50,12 +41,3 @@ socket.on('typing', function(data){
 socket.on('message',function(data){
     console.log(data);
 });
-
-// socket.on('ping',()=>{
-//     console.log("ping was recieved from the server");
-// });
-
-// socket.on('pong',(latency)=>{
-//     console.log(latency);
-//     console.log("pong was sent to server");
-// })

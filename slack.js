@@ -1,21 +1,23 @@
 var express = require('express');
-var bodyParser = require("body-parser");
 var socket = require('socket.io');
 let namespaces = require('./public/data/Namespace');
+const { port } = require('./constants/envConfig');
 
 var app = express();
-
-const port = process.env.PORT || 4000;
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }))
-
-var server = app.listen(port, function () {
+var server = app.listen(4000, function () {
     console.log(`listening to request on port ${port}`);
 });
 var io = socket(server);
+
+app.set('view engine', 'ejs');
+
 app.use(express.static('public'));
 
 
+app.get('/board', async function (req, res, next) {
+    console.log("hhh");
+    res.render('board');
+})
 
 io.on('connection', function (socket) {
     let nsData = namespaces.map((ns) => {
@@ -26,6 +28,17 @@ io.on('connection', function (socket) {
     })
     console.log(nsData);
     socket.emit('nsList', nsData);
+
+
+    // For board and chat
+    socket.on('mouse', (data) => {
+        console.log(data);
+        socket.broadcast.emit('mouse', data);
+    })
+
+    socket.on('chat', (chat) => {
+        io.emit('chat', chat);
+    })
 })
 
 namespaces.forEach(namespace => {
@@ -74,8 +87,17 @@ namespaces.forEach(namespace => {
 
             io.of(namespace.endpoint).to(roomTitle).emit("messageToClients", fullMessage);
         })
+        nsSocket.on('mouse', (data) => {
+            // Data comes in as whatever was sent, including objects
+            console.log("Received: 'mouse' " + data.x + " " + data.y);
 
+            // Send it to all other clients
+            nsSocket.broadcast.emit('mouse', data);
 
+            // This is a way to send to everyone including sender
+            // io.sockets.emit('message', "this goes to everyone");
+
+        });
     })
 });
 
