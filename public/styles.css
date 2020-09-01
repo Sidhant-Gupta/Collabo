@@ -49,7 +49,7 @@ body{
 
 .chat-panel{
   background-color: #fff;
-  min-height: 50vh;
+  min-height: 100vh;
   position: relative;
   padding-top: 10px;
 }

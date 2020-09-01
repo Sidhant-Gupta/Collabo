@@ -28,14 +28,7 @@ function setup() {
     feedback = document.getElementById('feedback');
 
   // Emit events
-  // btn.mousePressed(() => {
-  //   console.log("holaaaaaaaaaaa");
-  //   socketChat.emit('chat', {
-  //     message: message.value,
-  //     handle: handle.value
-  //   });
-  //   message.value = "";
-  // })
+  
   btn.addEventListener('click', function () {
     console.log("holaaaaaaaaaaa");
     socketChat.emit('chat', {
