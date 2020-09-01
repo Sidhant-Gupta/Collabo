@@ -1,10 +1,10 @@
 var express = require('express');
 var socket = require('socket.io');
 let namespaces = require('./public/data/Namespace');
-const { port } = require('./constants/envConfig');
+const port = 4000 || process.env.PORT;
 
 var app = express();
-var server = app.listen(4000, function () {
+var server = app.listen(port, function () {
     console.log(`listening to request on port ${port}`);
 });
 var io = socket(server);
@@ -43,9 +43,11 @@ io.on('connection', function (socket) {
 
 namespaces.forEach(namespace => {
     io.of(namespace.endpoint).on('connection', (nsSocket) => {
+        console.log("HANDSHAKE", nsSocket.handshake);
         console.log("namespace", namespace.endpoint);
         console.log(`${nsSocket.id} has joined ${namespace.nsTitle}`);
 
+        const username = nsSocket.handshake.query.username;
         nsSocket.emit('nsRoomLoad', namespace.rooms);
 
         nsSocket.on('joinRoomEvent', (roomName, noOfUsersCallback) => {
@@ -68,7 +70,7 @@ namespaces.forEach(namespace => {
             const fullMessage = {
                 msg: text,
                 time: new Date(),
-                username: "Sidhant",
+                username: username,
                 avatar: 'https://via.placeholder.com/30'
             }
             console.log(fullMessage);

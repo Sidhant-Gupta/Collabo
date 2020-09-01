@@ -1,7 +1,10 @@
-// const { port } = require("./constants/envConfig");
-
-// import { joinNs } from "./joinNs";
-var socket = io.connect('http://localhost:4000');
+const username=prompt("What is your username!?")
+var socket = io.connect('http://localhost:4000',
+          {
+            query:{
+              username
+            }
+          });
 // var socket = io.connect(`http://localhost:${port}`);
 let nsSocket = "";
 // var socket3=io.connect('http://localhost:4000/mozilla');
