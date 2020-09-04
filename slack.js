@@ -1,7 +1,7 @@
 var express = require('express');
 var socket = require('socket.io');
 let namespaces = require('./public/data/Namespace');
-const port = 4000 || process.env.PORT;
+const port = process.env.PORT || 4000;
 
 var app = express();
 var server = app.listen(port, function () {
