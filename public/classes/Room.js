@@ -5,6 +5,7 @@ class Room{
     this.namespace=namespace;
     this.privateRoom=privateRoom;
     this.history=[];
+    this.boardHistory=[];
   }
 
   addMessage(message){
@@ -13,6 +14,10 @@ class Room{
 
   clearHistory(){
     this.history=[];
+  }
+
+  addMessageBoard(message){
+    this.boardHistory.push(message);
   }
 }
 
