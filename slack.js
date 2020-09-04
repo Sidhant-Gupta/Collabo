@@ -1,6 +1,6 @@
 var express = require('express');
 var socket = require('socket.io');
-let namespaces = require('./public/data/Namespace');
+let namespaces = require('./public/data/namespace');
 const port = 4000 || process.env.PORT;
 
 var app = express();
