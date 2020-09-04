@@ -40,7 +40,7 @@ namespaces.forEach(namespace => {
         nsSocket.on('joinRoomEvent', (roomName, noOfUsersCallback) => {
             let prevRoom = Object.keys(nsSocket.rooms)[1];
             nsSocket.leave(prevRoom);
-            updateNoOfUsers(namespace, roomName);
+            updateNoOfUsers(namespace, prevRoom);
             nsSocket.join(roomName);
             updateNoOfUsers(namespace, roomName);
             console.log("ROOM ", roomName);
@@ -63,6 +63,7 @@ namespaces.forEach(namespace => {
                 username: username,
                 avatar: 'https://via.placeholder.com/30'
             }
+            // https://via.placeholder.com/30
             console.log(fullMessage);
             console.log(nsSocket.rooms);
             const roomTitle = Object.keys(nsSocket.rooms)[1];

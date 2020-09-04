@@ -3,7 +3,7 @@ var message, handle, btn, output, feedback, nspace, room;
 
 function setup() {
   let cnv = createCanvas(700, 500);
-  background(0);
+  background(40);
   cnv.position(200, 150);
 
   var mouseIsDragged = false;
@@ -24,7 +24,7 @@ function setup() {
   // BOARD
   socket.on('mouse', (data) => {
     console.log("Got: " + data.x + " " + data.y);
-    fill(0, 0, 255);
+    fill(114,196,212);
     noStroke();
     ellipse(data.x, data.y, 20, 20);
   });

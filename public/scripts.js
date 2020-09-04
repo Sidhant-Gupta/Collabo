@@ -124,7 +124,7 @@ function buildHtml(msg) {
       <img src=${msg.avatar}/>
   </div>
   <div class="user-message">
-      <div class="user-name-time">${msg.username} <span>${msg.time}</span></div>
+      <div class="user-name-time"> <strong>${msg.username}: </strong><span>${msg.time}</span></div>
       <div class="message-text">${msg.msg}</div>
   </div>
   </li> `
