@@ -52,6 +52,7 @@ namespaces.forEach(namespace => {
             console.log("joined room ", nsRoom);
 
             nsSocket.emit('history', nsRoom.history);
+            nsSocket.emit('boardHistory', nsRoom.boardHistory);
 
         })
 
@@ -87,7 +88,12 @@ namespaces.forEach(namespace => {
 
         // Messages from board chat
         nsSocket.on('chat', (chat) => {
-            io.of(namespace.endpoint).to(chat.room).emit('chat', chat);
+
+            const nsRoom = namespace.rooms.find((room) => {
+                return room.roomTitle === chat.room;
+            });
+            nsRoom.addMessageBoard(chat);
+            io.of(namespace.endpoint).to(nsRoom.roomTitle).emit('chat', chat);
         })
     })
 });

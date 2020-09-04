@@ -41,27 +41,28 @@ function setup() {
     message.value = "";
   });
 
+  socket.on('boardHistory', (history) => {
+    output.innerHTML = "";
+    history.forEach((hist) => {
+      const newMsg = buildHtml(hist);
+      const currentMessage = output.innerHTML;
+      output.innerHTML = currentMessage + newMsg;
+    })
+    output.scrollTo(0, output.scrollHeight);
+  })
+
   socket.on('chat', function (data) {
     feedback.innerHTML = '';
     output.innerHTML += '<p><strong>' + data.handle + ': </strong>' + data.message + '</p>';
   });
 
-  message.addEventListener('keypress', function () {
-    socket.emit('typing', handle.value);
-  })
+  // message.addEventListener('keypress', function () {
+  //   socket.emit('typing', handle.value);
+  // })
 
-  socket.on('typing', function (data) {
-    feedback.innerHTML = '<p><em>' + data + ' is typing a message...</em></p>';
-  });
-
-  socket.on('connect', () => {
-    console.log("id", socket.id);
-  })
-
-  socket.on('message', function (data) {
-    console.log(data);
-  });
-
+  // socket.on('typing', function (data) {
+  //   feedback.innerHTML = '<p><em>' + data + ' is typing a message...</em></p>';
+  // });
 }
 
 function mouseDragged() {
@@ -86,4 +87,9 @@ function joinRoom(roomName) {
   socket.emit('joinRoomEvent', roomName, (numberOfMembers) => {
     console.log(numberOfMembers);
   });
+}
+
+function buildHtml(msg) {
+  const newHtml = `<p><strong>  ${msg.handle}  : </strong>  ${msg.message} </p>`
+  return newHtml;
 }
