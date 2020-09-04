@@ -10,13 +10,11 @@ var server = app.listen(port, function () {
 var io = socket(server);
 
 app.set('view engine', 'ejs');
-
 app.use(express.static('public'));
 
-
-app.get('/board', async function (req, res, next) {
-    console.log("hhh");
-    res.render('board');
+app.get('/:nspace', async function (req, res, next) {
+    console.log("query", req.query.room);
+    res.render('board', { nspace: req.params.nspace, room: req.query.room });
 })
 
 io.on('connection', function (socket) {
@@ -28,17 +26,6 @@ io.on('connection', function (socket) {
     })
     console.log(nsData);
     socket.emit('nsList', nsData);
-
-
-    // For board and chat
-    socket.on('mouse', (data) => {
-        console.log(data);
-        socket.broadcast.emit('mouse', data);
-    })
-
-    socket.on('chat', (chat) => {
-        io.emit('chat', chat);
-    })
 })
 
 namespaces.forEach(namespace => {
@@ -56,6 +43,7 @@ namespaces.forEach(namespace => {
             updateNoOfUsers(namespace, roomName);
             nsSocket.join(roomName);
             updateNoOfUsers(namespace, roomName);
+            console.log("ROOM ", roomName);
             // .clients() gets the no of users conneted to namspace or that room 
             const nsRoom = namespace.rooms.find((room) => {
                 // console.log(room.roomTitle);
@@ -66,6 +54,7 @@ namespaces.forEach(namespace => {
             nsSocket.emit('history', nsRoom.history);
 
         })
+
         nsSocket.on('messageToServer', (text) => {
             const fullMessage = {
                 msg: text,
@@ -89,17 +78,17 @@ namespaces.forEach(namespace => {
 
             io.of(namespace.endpoint).to(roomTitle).emit("messageToClients", fullMessage);
         })
+
+        // drawing on board
         nsSocket.on('mouse', (data) => {
-            // Data comes in as whatever was sent, including objects
             console.log("Received: 'mouse' " + data.x + " " + data.y);
-
-            // Send it to all other clients
-            nsSocket.broadcast.emit('mouse', data);
-
-            // This is a way to send to everyone including sender
-            // io.sockets.emit('message', "this goes to everyone");
-
+            nsSocket.broadcast.to(data.room).emit('mouse', data);
         });
+
+        // Messages from board chat
+        nsSocket.on('chat', (chat) => {
+            io.of(namespace.endpoint).to(chat.room).emit('chat', chat);
+        })
     })
 });
 
