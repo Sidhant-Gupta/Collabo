@@ -1,15 +1,11 @@
-const username=prompt("What is your username!?")
+const username = prompt("What is your username!?")
 var socket = io.connect('http://localhost:4000',
-          {
-            query:{
-              username
-            }
-          });
-// var socket = io.connect(`http://localhost:${port}`);
+  {
+    query: {
+      username
+    }
+  });
 let nsSocket = "";
-// var socket3=io.connect('http://localhost:4000/mozilla');
-// var socket3=io.connect('http://localhost:4000/linux');
-
 
 // Listen for events
 
@@ -24,18 +20,18 @@ socket.on('nsList', (nsData) => {
     elem.addEventListener("click", (e) => {
       const nsEndpoint = elem.getAttribute('ns');
       joinNs(nsEndpoint);
-      console.log("clicked",nsEndpoint);
+      console.log("clicked", nsEndpoint);
     });
   })
   joinNs('/wiki');
 })
 
 function joinNs(endpoint) {
-  if(nsSocket){
+  if (nsSocket) {
     nsSocket.close();
-    document.querySelector('#user-input').removeEventListener('submit',formSubmission);
+    document.querySelector('#user-input').removeEventListener('submit', formSubmission);
   }
-  console.log("in joinNs");
+  console.log("in joinNs ", endpoint);
   nsSocket = io.connect(`http://localhost:4000${endpoint}`);
 
   nsSocket.on('nsRoomLoad', (nsRooms) => {
@@ -49,73 +45,80 @@ function joinNs(endpoint) {
     });
     let roomNodes = document.getElementsByClassName('room');
 
-      Array.from(roomNodes).forEach((elem) => {
-        elem.addEventListener('click', (e) => {
-          console.log(e.target.innerText);
-          joinRoom(e.target.innerText);
-        })
+    let roomId;
+    Array.from(roomNodes).forEach((elem) => {
+      elem.addEventListener('click', (e) => {
+        console.log(e.target.innerText);
+        roomId = e.target.innerText;
+        joinRoom(e.target.innerText);
       })
-      const topRoom = document.querySelector('.room'); // queryselector selecys the first one only
-      const topRoomName = topRoom.innerText;
-      console.log("clicked",topRoomName);
-      joinRoom(topRoomName); 
+    })
+    const topRoom = document.querySelector('.room'); // queryselector selecys the first one only
+    const topRoomName = topRoom.innerText;
+    roomId = topRoom.innerText;
+    console.log("clicked", topRoomName);
+    joinRoom(topRoomName);
+
+    document.getElementById("boardButton").onclick = function () {
+      location.href = `http://localhost:4000${endpoint}?room=${roomId}`;
+    };
   })
 
-  document.querySelector('.message-form').addEventListener('submit',formSubmission);
+  document.querySelector('.message-form').addEventListener('submit', formSubmission);
 
-  nsSocket.on("messageToClients",(fullMsg)=>{
+  nsSocket.on("messageToClients", (fullMsg) => {
     console.log(fullMsg);
-    const newMessage=buildHtml(fullMsg);
-    document.querySelector('#messages').innerHTML+=newMessage;
+    const newMessage = buildHtml(fullMsg);
+    document.querySelector('#messages').innerHTML += newMessage;
   })
-  
+
 }
 
-function formSubmission(event){
+function formSubmission(event) {
   event.preventDefault();
-  const newMessage=document.querySelector('#user-message').value;
-  nsSocket.emit('messageToServer',newMessage);
+  const newMessage = document.querySelector('#user-message').value;
+  nsSocket.emit('messageToServer', newMessage);
 }
 
 
-function joinRoom(roomName){
-  nsSocket.emit('joinRoomEvent',roomName,(numberOfMembers)=>{
-    document.querySelector('.curr-room-num-users').innerHTML=`${numberOfMembers} <span class="glyphicon glyphicon-user"></span>`;
+function joinRoom(roomName) {
+  nsSocket.emit('joinRoomEvent', roomName, (numberOfMembers) => {
+    document.querySelector('.curr-room-num-users').innerHTML = `${numberOfMembers} <span class="glyphicon glyphicon-user"></span>`;
   });
 
-  nsSocket.on('history',(history)=>{
-    const messageUI=document.querySelector('#messages');
-    messageUI.innerHTML="";
-    history.forEach((hist)=>{
-      const newMsg=buildHtml(hist);
-      const currentMessage=messageUI.innerHTML;
-      messageUI.innerHTML=currentMessage +newMsg;
+  nsSocket.on('history', (history) => {
+    const messageUI = document.querySelector('#messages');
+    messageUI.innerHTML = "";
+    history.forEach((hist) => {
+      const newMsg = buildHtml(hist);
+      const currentMessage = messageUI.innerHTML;
+      messageUI.innerHTML = currentMessage + newMsg;
     })
-    messageUI.scrollTo(0,messageUI.scrollHeight);
+    messageUI.scrollTo(0, messageUI.scrollHeight);
   })
 
-  nsSocket.on('updateUsers',(noOfUsers)=>{
-    document.querySelector('.curr-room-text').innerText=`${roomName} `;
-    document.querySelector('.curr-room-num-users').innerHTML=`${noOfUsers} <span class="glyphicon glyphicon-user"></span>`;
+  nsSocket.on('updateUsers', (noOfUsers) => {
+    document.querySelector('.curr-room-text').innerText = `${roomName} `;
+    document.querySelector('.curr-room-num-users').innerHTML = `${noOfUsers} <span class="glyphicon glyphicon-user"></span>`;
   });
 
-  let searchBox=document.querySelector("#search-box");
-  searchBox.addEventListener('input',(e)=>{
+  let searchBox = document.querySelector("#search-box");
+  searchBox.addEventListener('input', (e) => {
     console.log(e.target.value);
-    let messages=Array.from(document.getElementsByClassName('message-text'));
+    let messages = Array.from(document.getElementsByClassName('message-text'));
     console.log(messages);
-    messages.forEach((msg)=>{
-      if(msg.innerText.toLowerCase().indexOf(e.target.value.toLowerCase(  ))===-1)
-        msg.style.display="none";
+    messages.forEach((msg) => {
+      if (msg.innerText.toLowerCase().indexOf(e.target.value.toLowerCase()) === -1)
+        msg.style.display = "none";
       else
-        msg.style.display="block";
+        msg.style.display = "block";
     })
   })
 
 }
 
-function buildHtml(msg){
-  const newHtml=`
+function buildHtml(msg) {
+  const newHtml = `
   <li>
   <div class="user-image">
       <img src=${msg.avatar}/>

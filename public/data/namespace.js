@@ -12,8 +12,11 @@ let linuxNs = new Namespace(2,'Linux','https://upload.wikimedia.org/wikipedia/co
 
 // Make the main room and add it to rooms. it will ALWAYS be 0
 wikiNs.addRoom(new Room(0,'New Articles','Wiki'));
-wikiNs.addRoom(new Room(1,'Editors','Wiki',true));
-wikiNs.addRoom(new Room(2,'Other','Wiki'));
+wikiNs.addRoom(new Room(2,'Editors','Wiki',true));
+wikiNs.addRoom(new Room(4,'Other','Wiki'));
+wikiNs.addRoom(new Room(1,'Board-New Articles','Wiki'));
+wikiNs.addRoom(new Room(3,'Board-Editors','Wiki',true));
+wikiNs.addRoom(new Room(5,'Board-Other','Wiki'));
 
 mozNs.addRoom(new Room(0,'Firefox','Mozilla'));
 mozNs.addRoom(new Room(1,'SeaMonkey','Mozilla'));
