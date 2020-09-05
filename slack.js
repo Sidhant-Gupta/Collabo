@@ -11,7 +11,7 @@ var io = socket(server);
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
-let namespaces = require('./public/data/Namespace');
+let namespaces = require('./public/data/namespaces');
 
 app.get('/:nspace', async function (req, res, next) {
     console.log("query", req.query.room);
