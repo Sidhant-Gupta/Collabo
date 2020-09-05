@@ -1,6 +1,6 @@
 var express = require('express');
 var socket = require('socket.io');
-let namespaces = require('./public/data/Namespace');
+
 const port = process.env.PORT || 4000;
 
 var app = express();
@@ -11,6 +11,7 @@ var io = socket(server);
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
+let namespaces = require('./public/data/Namespace');
 
 app.get('/:nspace', async function (req, res, next) {
     console.log("query", req.query.room);
