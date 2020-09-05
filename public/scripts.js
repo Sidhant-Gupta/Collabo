@@ -1,10 +1,9 @@
 const username = prompt("What is your username!?")
-var socket = io.connect('http://localhost:4000',
-  {
-    query: {
-      username
-    }
-  });
+var socket = io({
+  query: {
+    username
+  }
+});
 let nsSocket = "";
 
 // Listen for events
@@ -32,7 +31,7 @@ function joinNs(endpoint) {
     document.querySelector('#user-input').removeEventListener('submit', formSubmission);
   }
   console.log("in joinNs ", endpoint);
-  nsSocket = io.connect(`http://localhost:4000${endpoint}`);
+  nsSocket = io(`${endpoint}`);
 
   nsSocket.on('nsRoomLoad', (nsRooms) => {
     console.log("test")
@@ -60,7 +59,7 @@ function joinNs(endpoint) {
     joinRoom(topRoomName);
 
     document.getElementById("boardButton").onclick = function () {
-      location.href = `http://localhost:4000${endpoint}?room=${roomId}`;
+      location.href = `${endpoint}?room=${roomId}`;
     };
   })
 
