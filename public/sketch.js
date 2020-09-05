@@ -18,13 +18,13 @@ function setup() {
   console.log("nspace  ", nspace);
   console.log("room  ", room);
 
-  socket = io.connect(`http://localhost:4000/${nspace}`);
+  socket = io(`/${nspace}`);
   joinRoom(room);
 
   // BOARD
   socket.on('mouse', (data) => {
     console.log("Got: " + data.x + " " + data.y);
-    fill(114,196,212);
+    fill(114, 196, 212);
     noStroke();
     ellipse(data.x, data.y, 20, 20);
   });
