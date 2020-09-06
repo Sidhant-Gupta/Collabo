@@ -4,6 +4,7 @@ body{
   
 }
 
+
 .namespaces{
   background-color: #282c34;
   min-height: 100vh;
@@ -45,6 +46,7 @@ body{
   color: #ABB2BF;
   
 }
+
 
 
 .chat-panel{
@@ -131,6 +133,7 @@ h2{
   padding: 10px 20px;
   color: #575ed8;
 }
+
 
 #mario-chat{
   max-width: 600px;
