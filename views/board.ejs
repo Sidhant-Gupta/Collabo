@@ -17,8 +17,36 @@
 </head>
 
 <body>
+  
+  <span style="font-size:25px;cursor:pointer;position:absolute; z-index: 1;"onclick ="openNav()">&#9776; People</span>
+  <div id="header">
+    <h1>Collabo-<%=room%></h1> 
+    <!-- <img style="position: absolute;z-index:1;"src="smiley.gif" alt="Collabo">  -->
+  </div>
+  
+   
+  <div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <h2 style=color:rgb(240,233,233)>Member 1</h2>
+    <h2 style=color:rgb(240,233,233)>Member 2</h2>
+    <h2 style=color:rgb(240,233,233)>Member 3</h2>
+    <h2 style=color:rgb(240,233,233)>Member 4</h2>
+  </div>
+
+
+  <script>
+    function openNav() {
+      document.getElementById("mySidenav").style.width = "200px";
+    }
+    
+    function closeNav() {
+      document.getElementById("mySidenav").style.width = "0";
+    }
+    </script>
+       
+
   <div id="mario-chat">
-    <h2>Messages </h2>
+    <h2 style=background:#bcac1a80;>Messages </h2>
 
     <div id="chat-window">
       <div id="output"></div>
